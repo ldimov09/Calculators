@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="navigation">
+        <img src="images/logo.png" width="150px" class="logo_img">
+        <a href="index.html" class="home_button">Начало</a>
+        <a href="NODNOK.html" class="home_button">НОК, НОД и др./a>
+        <a href="drobi.html" class="home_button">Дроби</a>
+
+
+    </div>
+    <div class="content-drobi">
+        <h1>Дроби:</h1>
+        <div class="one-input-div upper">
+            <div class="drob-flex">
+                <input id="ch1" type="number">
+                <div class="drob-line"></div>
+                <input id="zn1" type="number">
+            </div>
+            <span style="margin-top:21px"> + </span>
+            <div class="drob-flex">
+                <input id="ch2" type="number">
+                <div class="drob-line"></div>
+                <input id="zn2" type="number">
+            </div>
+            <span style="margin-top:21px"> = </span>
+            <div class="drob-flex">
+                <span id="ansch" class="output"></span>
+                <div class="drob-line"></div>
+                <span id="anszn" class="output"></span>
+            </div>
+        </div>
+        <button style="margin-bottom:20px" id="senddrob">Намери</button>
+        <div class="one-input-div">
+            <div class="drob-flex">
+                <input id="ch1Min" type="number">
+                <div class="drob-line"></div>
+                <input id="zn1Min" type="number">
+            </div>
+            <span style="margin-top:21px"> - </span>
+            <div class="drob-flex">
+                <input id="ch2Min" type="number">
+                <div class="drob-line"></div>
+                <input id="zn2Min" type="number">
+            </div>
+            <span style="margin-top:21px"> = </span>
+            <div class="drob-flex">
+                <span id="anschMin" class="output"></span>
+                <div class="drob-line"></div>
+                <span id="ansznMin" class="output"></span>
+            </div>
+        </div>
+        <button style="margin-top:15px" id="senddrobMin">Намери</button>
+    </div>
+    <script>
+        var outch = document.getElementById("ansch");
+        var outzn = document.getElementById("anszn");
+        var chs1 = document.getElementById("ch1");
+        var zna2 = document.getElementById("zn2");
+        var zna1 = document.getElementById("zn1");
+        var chs2 = document.getElementById("ch2");
+        var send = document.getElementById("senddrob");
+
+        send.addEventListener("click", function(){
+            outch.innerHTML = `${sub(chs1.value, zna1.value, chs2.value, zna2.value)[0]}`;
+            outzn.innerHTML = `${sub(chs1.value, zna1.value, chs2.value, zna2.value)[1]}`;
+        });
+
+        var outchMin = document.getElementById("anschMin");
+        var outznMin = document.getElementById("ansznMin");
+        var chs1Min = document.getElementById("ch1Min");
+        var zna2Min = document.getElementById("zn2Min");
+        var zna1Min = document.getElementById("zn1Min");
+        var chs2Min = document.getElementById("ch2Min");
+        var sendMin = document.getElementById("senddrobMin");
+
+        sendMin.addEventListener("click", function(){
+            outchMin.innerHTML = `${izv(chs1Min.value, zna1Min.value, chs2Min.value, zna2Min.value)[0]}`;
+            outznMin.innerHTML = `${izv(chs1Min.value, zna1Min.value, chs2Min.value, zna2Min.value)[1]}`;
+        });
+
+        function razlagane_result(num) {
+            var arr = razlagane(num);
+            if (arr.length == 1) {
+                if (arr[0] == "error"){
+                    p.innerHTML = `<span style='color:red'>Некоректи данни!</span>`;
+                    alert("Некккеиевфй");
+                }else
+                    p.innerHTML = `<span style='color:blue'>Числото ${arr[0]} е просто!</span>`;
+            } else {
+                if (arr.length == 0) {
+                    p.innerHTML = `<span style='color:red'>1 не е нито просто нито съставно число.</span>`;
+                } else {
+                    p.innerHTML = `<span style='color:darkgreen'>Простите множители са: ${arr}.</span>`;
+                }
+            }
+        }
+        function razlagane(num) {
+            num = Number(num);
+            var arr = [];
+            if (num === "") {
+                alert("Некоректи данни! raz");
+                arr[0] = "error";
+                return arr;
+            }
+            var numforout = num;
+            while (num != 1) {
+                for (let i = 2; i <= num; i++) {
+                    for (let j = 2; j <= i; j++) {
+                        if ((i % j != 0 || i / j == 1) && num % i == 0) {
+                            num = num / i;
+                            arr.push(i);
+                            i = 1;
+                        }
+                        break;
+                    }
+                }
+            }
+            return arr;
+        }
+        /*function razlagane_tati(input){
+            var num = Number(input.shift());
+            var arr = [];
+            
+            while(num != 1){
+                var ne_razdeleno = true;
+                var delitel = 2;
+                while(ne_razdeleno){
+                    if(num % delitel == 0){
+                        num = num / delitel;
+                        arr.push(delitel);
+                        ne_razdeleno = false;
+                    }
+                    delitel++;
+                }
+            }
+            console.log(arr);
+        }*/
+        //-------------------NOK----------------------
+        function nok(r1, r2) {
+            if (r1 == "" || r2 == "") {
+                alert("Некоректи данни! nok");
+                //pnok.innerHTML = `<span style='color:red'>Некоректни данни!</span>`;
+                return false;
+            }
+            r1 = razlagane([r1]);
+            r2 = razlagane([r2]);
+            if(r1 === "error" || r2 === "error"){
+                alert("Тука съм. nok");
+                return "error";
+            }
+            var ans = 1;
+            //console.log(r1, r2);
+            if (r1.length >= r2.length) {
+                for (let i = 0; i <= r2.length - 1; i++) {
+                    let my_index = r1.indexOf(r2[i]);
+                    console.log("my_index", my_index);
+                    if (my_index !== -1) {
+                        r1.splice(my_index, 1);
+                        //console.log(r1);
+                    }
+                    ans = ans * r2[i];
+                }
+                for (let j = 0; j < r1.length; j++) {
+                    ans = ans * r1[j];
+                }
+            } else {
+                for (let i = 0; i <= r1.length - 1; i++) {
+                    let my_index = r2.indexOf(r1[i]);
+                    console.log("my_index", my_index);
+                    if (my_index !== -1) {
+                        r2.splice(my_index, 1);
+                        //console.log(r2);
+                    }
+                    ans = ans * r1[i];
+                }
+                for (let j = 0; j < r2.length; j++) {
+                    ans = ans * r2[j];
+                }
+            }
+            console.log(ans);
+
+            return ans;
+
+
+        }
+        //=======================NOD==========================
+        function nod(r1, r2) {
+            if (r1 == "" || r2 == "") {
+                alert("Некоректи данни! nod");
+               //pnod.innerHTML = `<span style='color:red'>Некоректни данни!</span>`;
+                return false;
+            }
+            r1 = razlagane([r1]);
+            r2 = razlagane([r2]);
+            if(r1 === "error" || r2 === "error"){
+                alert("Тука съм.");
+                return "error";
+            }
+            var ans1 = 1;
+            //console.log(r1, r2);
+            if (r1.length >= r2.length) {
+                for (let i = 0; i <= r2.length - 1; i++) {
+                    let my_index = r1.indexOf(r2[i]);
+                    console.log("my_index", my_index);
+                    if (my_index != -1) {
+                        r1.splice(my_index, 1);
+                        //console.log(r1);
+                        ans1 = ans1 * r2[i];
+                    }
+
+                }
+            } else {
+                for (let i = 0; i <= r1.length - 1; i++) {
+                    let my_index = r2.indexOf(r1[i]);
+                    console.log("my_index", my_index);
+                    if (my_index !== -1) {
+                        r2.splice(my_index, 1);
+                        //console.log(r2);
+                        ans1 = ans1 * r1[i];
+                    }
+
+                }
+            }
+            console.log(ans1);
+            if (ans1 == 1) {
+               // pnod.innerHTML = `<span style='color:red'>Числата за взаимно прости!</span>`;
+            } else {
+               // pnod.innerHTML = `<span style='color:darkgreen'>Най-големият общ делиел е ${ans1}.</span>`;
+            }
+            return ans1;
+
+        }
+
+        function sub(ch1, zn1, ch2, zn2) {
+            let ansArr = [];
+            let temp = nok(zn1, zn2);
+            if(temp === "error"){
+                ansArr = [4 , 4];
+                return ansArr;
+            }
+            ch1 = ch1 * (temp / zn1);
+            ch2 = ch2 * (temp / zn2);
+            zn1 = temp;
+            zn2 = temp;
+            var ansch = ch1 + ch2;
+            var anszn = zn1;
+            let temp2 = nod(anszn, ansch);
+            if(temp2 === "error"){
+                let ansArr = [4 , 4];
+                return ansArr;
+            }
+            anszn = anszn / temp2;
+            ansch = ansch / temp2;
+            if (ansch === 0) anszn = 0;
+            ansArr = [ansch, anszn];
+            console.log(ansch, anszn);
+            return ansArr;
+        }
+
+        function izv(ch1, zn1, ch2, zn2) {
+            let ansArr = [];
+            let temp = nok(zn1, zn2);
+            if(temp === "error"){
+                ansArr = [4 , 4];
+                return ansArr;
+            }
+            ch1 = ch1 * (temp / zn1);
+            ch2 = ch2 * (temp / zn2);
+            zn1 = temp;
+            zn2 = temp;
+            let ansch = ch1 - ch2;
+            let anszn = zn1;
+            let temp2 = nod(anszn, ansch);
+            if(temp2 === "error"){
+                ansArr = [4 , 4];
+                return ansArr;
+            }
+            anszn = anszn / temp2;
+            ansch = ansch / temp2;
+            if (ansch === 0) anszn = 0;
+            ansArr = [ansch, anszn];
+            console.log(ansch, anszn);
+            return ansArr;
+        }
+
+        function sukrati(ch, zn){
+            let temp2 = nod(ch, zn);
+            zn = zn / temp2;
+            ch = ch / temp2;
+            let ansArr = [ch, zn];
+            console.log(ansArr);
+            return ansArr;
+        }
+    </script>
+</body>
+
+</html>

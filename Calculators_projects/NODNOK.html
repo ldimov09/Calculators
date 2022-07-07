@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+       
+    </style>
+</head>
+
+<body>
+    <div class="navigation">
+        <img src="images/logo.png" width="150px" class="logo_img">
+        <a href="index.html" class="home_button">Начало</a>
+        <a href="NODNOK.html" class="home_button">НОК, НОД и др.</a>
+        <a href="drobi.html" class="home_button">Дроби</a>
+
+
+    </div>
+
+    <div class="title">
+        <h1>Намиране на НОК, НОД. Разлагане на прости множители.</h1>
+    </div>
+    <div class="content">
+        <div class="one-element-calc razlagane">
+            <div>
+                <h2>Разлагане на число на прости множители</h1>
+            </div>
+            <p class="output">Въведете число:</p>
+            <input id="Razinp" type="number" value="1" min="1" class="calc-input">
+            <button id="send">Намери</button>
+            <p class="output" id = "praz">Въведете число за да видите резултатите.</p>
+        </div>
+        <div  class="one-element-calc">
+            <div>
+              <h2>Намиране на най-малко общо кратно: </h2>
+            </div>
+            <p class="output" >Въведете числa:</p>
+            <input id="nokinp" type="number" value="1" min="1" class="calc-input">
+            <input id="nokinp2" type="number" value="1" min="1" class="calc-input">
+            <button id="sendnok">Намери</button>
+        <p  class="output" id="pnok">Въведете число за да видите резултатите.</p>
+        </div>
+
+        <div  class="one-element-calc">
+            <div>
+                <h2>Намиране на най-голям общ делител</h1>
+            </div>
+            <p class="output" >Въведете числa:</p>
+            <input id="nodinp" type="number" value="1" min="1" class="calc-input">
+            <input id="nodinp2" type="number" value="1" min="1" class="calc-input">
+            <button id="sendnod">Намери</button>
+            <p  class="output" id = "pnod">Въведете число за да видите резултатите.</p>
+        </div>
+    </div>
+
+    <script>
+
+        var raz = document.getElementById("Razinp");
+        var butraz = document.getElementById("send");
+        var p = document.getElementById("praz");
+
+        var noc = document.getElementById("nokinp");
+        var nok2 = document.getElementById("nokinp2");
+        var butnok = document.getElementById("sendnok");
+        var pnok = document.getElementById("pnok");
+
+        var nodv = document.getElementById("nodinp");
+        var nod2 = document.getElementById("nodinp2");
+        var butnod = document.getElementById("sendnod");
+        var pnod = document.getElementById("pnod");
+        //razl
+        butraz.addEventListener("click", function () {
+            razlagane_result(raz.value);
+        });
+        //---------NOK-----------
+        butnok.addEventListener("click", function () {
+            nok(noc.value, nok2.value);
+        });
+        //----------Nod------------
+        butnod.addEventListener("click", function () {
+            nod(nodv.value, nod2.value);
+        });
+        //----------razlagane---------------------------------
+        function razlagane_result(num) {
+            var arr = razlagane(num);
+            if (arr.length == 1) {
+                if (arr[0] == "error")
+                    p.innerHTML = `<span style='color:red'>Некоректи данни!</span>`;
+                else
+                    p.innerHTML = `<span style='color:blue'>Числото ${arr[0]} е просто!</span>`;
+            } else {
+                if (arr.length == 0) {
+                    p.innerHTML = `<span style='color:red'>1 не е нито просто нито съставно число.</span>`;
+                } else {
+                    p.innerHTML = `<span style='color:darkgreen'>Простите множители са: ${arr}.</span>`;
+                }
+            }
+        }
+        function razlagane(num) {
+            var arr = [];
+            if (num == "") {
+                alert("Некоректи данни!");
+                arr[0] = "error";
+                return arr;
+            }
+            var numforout = num;
+            while (num != 1) {
+                for (let i = 2; i <= num; i++) {
+                    for (let j = 2; j <= i; j++) {
+                        if ((i % j != 0 || i / j == 1) && num % i == 0) {
+                            num = num / i;
+                            arr.push(i);
+                            i = 1;
+                        }
+                        break;
+                    }
+                }
+            }
+            return arr;
+        }
+        /*function razlagane_tati(input){
+            var num = Number(input.shift());
+            var arr = [];
+            
+            while(num != 1){
+                var ne_razdeleno = true;
+                var delitel = 2;
+                while(ne_razdeleno){
+                    if(num % delitel == 0){
+                        num = num / delitel;
+                        arr.push(delitel);
+                        ne_razdeleno = false;
+                    }
+                    delitel++;
+                }
+            }
+            console.log(arr);
+        }*/
+        //-------------------NOK----------------------
+        function nok(r1, r2) {
+            if (r1 == "" || r2 == "") {
+                alert("Некоректи данни!");
+                pnok.innerHTML = `<span style='color:red'>Некоректни данни!</span>`;
+                return false;
+            }
+            r1 = razlagane([r1]);
+            r2 = razlagane([r2]);
+            var ans = 1;
+            //console.log(r1, r2);
+            if (r1.length >= r2.length) {
+                for (let i = 0; i <= r2.length - 1; i++) {
+                    let my_index = r1.indexOf(r2[i]);
+                    console.log("my_index", my_index);
+                    if (my_index !== -1) {
+                        r1.splice(my_index, 1);
+                        //console.log(r1);
+                    }
+                    ans = ans * r2[i];
+                }
+                for (let j = 0; j < r1.length; j++) {
+                    ans = ans * r1[j];
+                }
+            } else {
+                for (let i = 0; i <= r1.length - 1; i++) {
+                    let my_index = r2.indexOf(r1[i]);
+                    console.log("my_index", my_index);
+                    if (my_index !== -1) {
+                        r2.splice(my_index, 1);
+                        //console.log(r2);
+                    }
+                    ans = ans * r1[i];
+                }
+                for (let j = 0; j < r2.length; j++) {
+                    ans = ans * r2[j];
+                }
+            }
+            console.log(ans);
+            pnok.innerHTML = `<span style='color:darkgreen'>Най-малкото общо кратно е: ${ans}.</span>`;
+
+
+        }
+        //=======================NOD==========================
+        function nod(r1, r2) {
+            if (r1 == "" || r2 == "") {
+                alert("Некоректи данни!");
+                pnod.innerHTML = `<span style='color:red'>Некоректни данни!</span>`;
+                return false;
+            }
+            r1 = razlagane([r1]);
+            r2 = razlagane([r2]);
+            var ans1 = 1;
+            //console.log(r1, r2);
+            if (r1.length >= r2.length) {
+                for (let i = 0; i <= r2.length - 1; i++) {
+                    let my_index = r1.indexOf(r2[i]);
+                    console.log("my_index", my_index);
+                    if (my_index != -1) {
+                        r1.splice(my_index, 1);
+                        //console.log(r1);
+                        ans1 = ans1 * r2[i];
+                    }
+
+                }
+            } else {
+                for (let i = 0; i <= r1.length - 1; i++) {
+                    let my_index = r2.indexOf(r1[i]);
+                    console.log("my_index", my_index);
+                    if (my_index !== -1) {
+                        r2.splice(my_index, 1);
+                        //console.log(r2);
+                        ans1 = ans1 * r1[i];
+                    }
+
+                }
+            }
+            console.log(ans1);
+            if (ans1 == 1) {
+                pnod.innerHTML = `<span style='color:red'>Числата за взаимно прости!</span>`;
+            } else {
+                pnod.innerHTML = `<span style='color:darkgreen'>Най-големият общ делиел е ${ans1}.</span>`;
+            }
+            return ans1;
+
+        }
+        /*function subizv (ch1, zn1, ch2, zn2){
+            zn1 = nok(zn1, zn2);
+            zn1 = nok(zn1, zn2);
+            ch1 = nok(zn1, zn2) / zn1;
+            ch2 = nok(zn1, zn2) / zn2;
+            var ansch = ch1 + ch2;
+            var anszn = zn1;
+            anszn = anszn / nod(anszn, ansch);
+            anszn = anszn / nod(anszn, ansch);
+            if(anszn < ansch){
+                var cialo = Math.floor(ansch / anszn);
+                ansch = ansch - cialo * anszn;
+            }
+            console.log(cialo, ansch, anszn);
+            //return false;
+        }
+        subizv(1, 3 ,1 ,2);*/
+    </script>
+</body>
+
+</html
